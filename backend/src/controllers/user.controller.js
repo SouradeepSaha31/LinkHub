@@ -12,8 +12,9 @@ import {ApiError} from "../utils/ApiError.js"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import fs from "fs"
-import {fileUploadOnCloudinary} from "../utils/cloudinary.js"
+import {fileUpload} from "../utils/cloudinary.js"
 import {ObjectId} from "mongodb"
+import { v4 as uuid } from 'uuid';
 
 
 
@@ -439,13 +440,9 @@ const uploadAvatar = async (req, res) => {
 
         if(req.file.size > 1024*1024*10) return res.status(404).json(new ApiError(404, "File size is too much"))
 
-        let filename = "avatar" + "--" + user._id
+        const avatar = await fileUpload(req.file, uuid())
 
-        const avatar = await fileUploadOnCloudinary(req.file.path, "Avatar_and_Coverimage", filename)
-
-        fs.unlinkSync(req.file.path)
-
-        await userModel.findOneAndUpdate({_id: req.user.user_id}, {avatar: avatar.secure_url})
+        await userModel.findOneAndUpdate({_id: req.user.user_id}, {avatar: avatar.url})
 
         let normaluser = await userModel.findOne({_id: req.user.user_id})
 
@@ -467,11 +464,9 @@ const uploadCoverImage = async (req, res) => {
 
         let filename = "coverimage" + "--" + user._id
 
-        const cover = await fileUploadOnCloudinary(req.file.path, "Avatar_and_Coverimage", filename)
+        const cover = await fileUpload(req.file, uuid())
 
-        fs.unlinkSync(req.file.path)
-
-        await userModel.findOneAndUpdate({_id: req.user.user_id}, {coverImage: cover.secure_url})
+        await userModel.findOneAndUpdate({_id: req.user.user_id}, {coverImage: cover.url})
 
         let normaluser = await userModel.findOne({_id: req.user.user_id})
 

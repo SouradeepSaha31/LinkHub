@@ -12,7 +12,7 @@ import {ApiError} from "../utils/ApiError.js"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import fs from "fs"
-import {fileUploadOnCloudinary} from "../utils/cloudinary.js"
+// import {fileUploadOnCloudinary} from "../utils/cloudinary.js"
 import {ObjectId} from "mongodb"
 
 

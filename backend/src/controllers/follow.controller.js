@@ -9,7 +9,7 @@ import {commentModel} from "../models/comment.model.js"
 import {likeCommentModel} from "../models/likecomment.model.js"
 
 import {ApiError} from "../utils/ApiError.js"
-import {fileUploadOnCloudinary} from "../utils/cloudinary.js"
+// import {fileUploadOnCloudinary} from "../utils/cloudinary.js"
 import {ObjectId} from "mongodb"
 
 

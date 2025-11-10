@@ -1,5 +1,6 @@
 import {Router} from "express"
 import { isLoggedIn } from "../middleware/isLoggedIn.middleware.js"
+import multer from "multer"
 import { 
     signup, 
     logout, 
@@ -8,7 +9,10 @@ import {
     uploadCoverImage, 
     updateDetailesOfProfilePage, 
         } from "../controllers/user.controller.js"
-import upload from "../middleware/multer.middleware.js"
+
+const upload = multer({
+    storage: multer.memoryStorage()
+})
 
 const userRouter = Router()
 

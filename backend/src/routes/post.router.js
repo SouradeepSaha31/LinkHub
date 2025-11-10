@@ -1,8 +1,12 @@
 import { Router } from "express";
 import { isLoggedIn } from "../middleware/isLoggedIn.middleware.js"
-import upload from "../middleware/multer.middleware.js"
+// import upload from "../middleware/multer.middleware.js"
+import multer from "multer";
 import { createPost, showPost} from "../controllers/post.controller.js";
 
+const upload = multer({
+    storage: multer.memoryStorage()
+})
 
 const postRouter = Router()
 

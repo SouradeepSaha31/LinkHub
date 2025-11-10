@@ -9,9 +9,11 @@ import {commentModel} from "../models/comment.model.js"
 import {likeCommentModel} from "../models/likecomment.model.js"
 
 import {ApiError} from "../utils/ApiError.js"
-import {fileUploadOnCloudinary} from "../utils/cloudinary.js"
+import {fileUpload} from "../utils/cloudinary.js"
 import fs from "fs"
 import {ObjectId} from "mongodb"
+
+import { v4 as uuid } from 'uuid';
 
 
 
@@ -28,22 +30,20 @@ const createPost = async (req, res) => {
 
         if(req.file.size > 1024*1024*10) return res.status(404).json(new ApiError(404, "File size is too much"))
 
-        const file = await fileUploadOnCloudinary(req.file.path, "posts", caption)
-
-        fs.unlinkSync(req.file.path)
+        const file = await fileUpload(req.file, uuid())
 
         const post = await postModel.create({
             caption: trimcap,
-            file: file.secure_url,
+            file: file.url,
             owner: user._id
         })
 
-        await ownerpostModel.create({
+        let owner = await ownerpostModel.create({
             postId: post._id,
             userId: user._id
         })
 
-        res.status(201).json({user: "ok"})
+        res.status(201).json({user: {post, owner}})
 
     } catch (error) {
         console.log(error)
